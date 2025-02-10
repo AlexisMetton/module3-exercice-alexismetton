@@ -40,7 +40,25 @@ const Character = {
     const query = "SELECT * FROM characters WHERE id = $1;";
     const { rows } = await  pool.query(query, [id]);
     return rows[0];
-  }
+  },
+
+  getCharactersForTeam: async () => {
+    const query = `
+      SELECT * FROM characters
+      WHERE id NOT IN (SELECT characters_id FROM compose);
+    `;
+    const { rows } = await pool.query(query);
+    return rows;
+  },
+
+  getCharactersByIds: async (ids) => {
+    const query = `
+      SELECT * FROM characters
+      WHERE id = ANY($1);
+    `;
+    const { rows } = await pool.query(query, [ids]);
+    return rows;
+}
 }
 
 module.exports = Character;

@@ -98,5 +98,34 @@ module.exports = {
     } catch (err) {
       res.status(500).json({ success: false, error: "Erreur lors de la récupération du character." });
     }
-  }
+  },
+
+  getCharactersForTeam: async (req, res) => {
+    try {
+      const characters = await Character.getCharactersForTeam();
+      res.status(200).json({
+        success: true,
+        characters,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        error: "Erreur lors de la récupération des characters.",
+      });
+    }
+  },
+
+  getCharactersByIds: async (req, res) => {
+    try {
+      const { characterIds } = req.body;
+      if (!characterIds || characterIds.length === 0) {
+        return res.status(400).json({ success: false, error: "Aucun ID fourni." });
+      }
+
+      const characters = await Character.getCharactersByIds(characterIds);
+      res.status(200).json({ success: true, characters });
+    } catch (err) {
+      res.status(500).json({ success: false, error: "Erreur lors de la récupération des personnages." });
+    }
+  },
 };

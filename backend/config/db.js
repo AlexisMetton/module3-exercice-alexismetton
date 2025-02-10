@@ -149,29 +149,19 @@ const createTables = async () => {
 
     CREATE TABLE IF NOT EXISTS parties (
         id SERIAL PRIMARY KEY,
-        captain_ID INT REFERENCES players(id) ON DELETE SET NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS compose (
-        parties_ID INT REFERENCES parties(id) ON DELETE CASCADE,
-        characters_ID INT REFERENCES characters(id) ON DELETE CASCADE,
-        PRIMARY KEY (parties_ID, characters_ID)
-    );
-
-    CREATE TABLE IF NOT EXISTS can_be (
-        role_ID INT REFERENCES roles(id) ON DELETE CASCADE,
-        class_ID INT REFERENCES class(id) ON DELETE CASCADE,
-        PRIMARY KEY (role_ID, class_ID)
-    );
-
-    CREATE TABLE IF NOT EXISTS teams (
-        id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL
     );
 
-    CREATE TABLE IF NOT EXISTS team_members (
-        team_id INT REFERENCES teams(id) ON DELETE CASCADE,
-        player_id INT UNIQUE NOT NULL
+    CREATE TABLE IF NOT EXISTS compose (
+        parties_id INT REFERENCES parties(id) ON DELETE CASCADE,
+        characters_id INT REFERENCES characters(id) ON DELETE CASCADE,
+        PRIMARY KEY (parties_id, characters_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS can_be (
+        role_id INT REFERENCES roles(id) ON DELETE CASCADE,
+        class_id INT REFERENCES class(id) ON DELETE CASCADE,
+        PRIMARY KEY (role_id, class_id)
     );
     `;
 

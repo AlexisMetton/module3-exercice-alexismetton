@@ -20,17 +20,20 @@ const TeamsForm = ({ onSubmit, defaultValues }) => {
   const [characters, setCharacters] = useState([]);
   const [classes, setClasses] = useState({});
   const [roles, setRoles] = useState({});
-  const [selectedCharacters, setSelectedCharacters] = useState([]);
+  const [selectedCharacters, setSelectedCharacters] = useState(defaultValues?.charactersIds || []);
 
   useEffect(() => {
     reset(defaultValues);
+    console.log(defaultValues);
+    console.log("selected", selectedCharacters);
   }, [defaultValues, reset]);
 
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const response = await fetch(`${API_URL}/characters`);
+        const response = await fetch(`${API_URL}/characters/team`);
         const data = await response.json();
+        //console.log(data)
         if (response.ok) {
           setCharacters(data.characters);
         } else {
@@ -40,6 +43,27 @@ const TeamsForm = ({ onSubmit, defaultValues }) => {
         console.error("Impossible de récupérer les personnages :", err);
       }
     };
+
+    const fetchSelectedCharacters = async () => {
+        if (!selectedCharacters || selectedCharacters.length === 0) return;
+  
+        try {
+          const response = await fetch(`${API_URL}/characters/by-ids`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ characterIds: selectedCharacters }),
+          });
+  
+          const data = await response.json();
+          if (response.ok) {
+            setCharacters((prev) => [...data.characters, ...prev]);
+          } else {
+            console.error("Erreur récupération des personnages sélectionnés :", data.error);
+          }
+        } catch (err) {
+          console.error("Impossible de récupérer les personnages sélectionnés :", err);
+        }
+      };
 
     const fetchClassesAndRoles = async () => {
       try {
@@ -62,6 +86,7 @@ const TeamsForm = ({ onSubmit, defaultValues }) => {
     };
 
     fetchCharacters();
+    fetchSelectedCharacters();
     fetchClassesAndRoles();
   }, []);
 
@@ -90,7 +115,7 @@ const TeamsForm = ({ onSubmit, defaultValues }) => {
       alert(validationError);
       return;
     }
-    await onSubmit({ ...data, playerIds: selectedCharacters.map((char) => char.id) });
+    await onSubmit({ ...data, charactersIds: selectedCharacters.map((char) => char.id) });
     reset();
     setSelectedCharacters([]);
   };
