@@ -41,6 +41,14 @@ const Header = () => {
                 >
                 Teams
             </Link>
+            <Link
+                to="/tournaments"
+                className={`block px-4 py-2 hover:underline text-gray-900 ${
+                    isActive("/tournaments") ? "underline" : ""
+                }`}
+                >
+                Tournaments
+            </Link>
           </nav>
 
           {/* Hamburger Menu */}

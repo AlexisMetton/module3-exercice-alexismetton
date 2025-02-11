@@ -16,12 +16,16 @@ const characterRoutes = require("./routes/charactersRoute");
 const classRoutes = require("./routes/classRoute");
 const roleRoutes = require("./routes/roleRoute");
 const teamRoutes = require("./routes/teamRoute");
+const tournamentRoutes = require("./routes/tournamentRoute");
+const dungeonsRoutes = require("./routes/dungeonsRoute");
 
 // Routes
 app.use('/characters', characterRoutes);
 app.use("/teams", teamRoutes);
 app.use("/classes", classRoutes);
 app.use("/roles", roleRoutes);
+app.use("/tournaments", tournamentRoutes);
+app.use("/dungeons", dungeonsRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
     app.listen(PORT, () => {
